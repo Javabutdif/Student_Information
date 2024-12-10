@@ -25,6 +25,21 @@ include "./server.php";
 
     <div class="container mx-auto">
         <h1 class="text-3xl font-bold mb-6 text-blue-600">Students</h1>
+
+        <form method="POST">
+        <div class="container flex flex-row my-2 gap-2">
+            <label id="selectCourse" >Select Course: </label>
+            <select id="selectCourse" name="selectedCourse" class="bg-gray-100">
+            <option value="All">All</option>
+             <option value="BSIT">BSIT</option>
+              <option value="BSCS">BSCS</option>
+               <option value="BSCE">BSCE</option>
+                <option value="BSEE">BSEE</option>
+        </select>
+        <button type="submit" name="filterCourse" class="p-1 bg-blue-400 hover:bg-blue-600 text-white rounded-md">Filter</button>
+        </div>
+        </form>
+       
         <table id="example" class="display table-auto w-full bg-white shadow-md rounded-md">
             <thead>
                 <tr class="bg-gray-800 text-white">
@@ -38,7 +53,7 @@ include "./server.php";
             </thead>
             <tbody>
                 <?php 
-                    foreach(get_all_students() as $students):
+                    foreach($filtered_course == "" ? get_all_students("All") : $filtered_course as $students):
                 ?>
                 <tr>
                     <td class="px-4 py-2"><?php echo $students['student_id'] ?></td>
@@ -48,6 +63,7 @@ include "./server.php";
                     <td class="px-4 py-2">
                         <div class="flex flex-row gap-2">
                             <a href="edit.php?student_id=<?php echo $students['student_id']; ?>" class="p-2 bg-gray-700 hover:bg-gray-500 rounded-md text-white">Edit</a>
+                            
                             <form method="POST">
                                 <input type="hidden" name="id" value="<?php echo $students['student_id']; ?>"/>
                                 <button type="submit" name="deleteStudent" class="p-2 bg-red-700 hover:bg-red-500 rounded-md text-white">Delete</button>

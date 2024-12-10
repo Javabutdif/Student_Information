@@ -16,9 +16,9 @@ if(isset($_POST["submitForm"])){
     $course = $_POST['course'];
     $year = $_POST['year'];
 
-
+    
     $query = "INSERT INTO student (`student_id`, `student_name`, `student_course`, `student_year`) VALUES ('$id', '$name', '$course', '$year')";
-
+    
     if(mysqli_query($connection, $query)){
          echo "<script>alert('Add Student Successful')</script>";
     }
@@ -53,13 +53,21 @@ if(isset($_POST["deleteStudent"])){
     }
    
 }
-function get_all_students(){
+function get_all_students($course){
     global $connection;
 
-    $query = "SELECT * FROM student";
+
+       $query = $course == 'BSEE' ? "SELECT * FROM student WHERE student_course = 'BSEE'" : 
+         ($course == 'BSIT' ? "SELECT * FROM student WHERE student_course = 'BSIT'" : 
+         ($course == 'BSCS' ? "SELECT * FROM student WHERE student_course = 'BSCS'" : 
+         ($course == 'BSCE' ? "SELECT * FROM student WHERE student_course = 'BSCE'" : 
+         "SELECT * FROM student ")));
+
+     
 
 
     $result = mysqli_query($connection, $query);
+    
     if (mysqli_num_rows($result) > 0) {
         $students = [];
         while ($row = mysqli_fetch_array($result)) {
@@ -68,5 +76,10 @@ function get_all_students(){
     }
     return $students;
 
+}
+if(isset($_POST['filterCourse'])){
+    $select =  $_POST['selectedCourse'];
+
+    $filtered_course =  get_all_students($select);
 }
 
